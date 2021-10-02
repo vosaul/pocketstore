@@ -14,7 +14,7 @@ const ItemsGrid = styled.div`
   }
 `
 const ItemsCard = styled.div`
-${tw`shadow-xl p-6 hover:shadow-inner align-middle relative rounded-lg border bg-gray-50 text-gray-700 hover:text-gray-100`}
+${tw`shadow-xl p-6 hover:shadow-inner align-middle relative rounded-lg border bg-gray-50 text-gray-700 `}
   display: grid;
   align-content: space-between;
   position: relative;
