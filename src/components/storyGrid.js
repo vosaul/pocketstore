@@ -5,7 +5,7 @@ import tw, { styled } from "twin.macro"
 
 const ItemsGrid = styled.div`
   display: grid;
-  gap: 10px 20px;
+  gap: 20px;
   @media (min-width: 768px) {
     grid-template-columns: 1fr 1fr;
   }
