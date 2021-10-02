@@ -6,9 +6,15 @@ import tw, { styled } from "twin.macro"
 const ItemsGrid = styled.div`
   display: grid;
   gap: 10px 20px;
-  grid-template-columns: 1fr 1fr 1fr;
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (min-width: 1200px) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 `
 const ItemsCard = styled.div`
+${tw`shadow-xl p-6 hover:shadow-inner align-middle relative rounded-lg border bg-gray-50 text-gray-700 hover:text-gray-100`}
   display: grid;
   align-content: space-between;
   position: relative;
@@ -31,14 +37,15 @@ const ItemsCard = styled.div`
     background: darkblue;
     color: white;
     font-size: 20px;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+      Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     height: fit-content;
     border-radius: 8px;
   }
 `
 const Header = styled.div`
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 1fr;
 `
 const Hint = () => {
   const data = useStaticQuery(graphql`
@@ -78,19 +85,23 @@ const Hint = () => {
 
   const Items = data.allHotlineXml.edges.map(item => {
     const Itt = item.node.xmlChildren.map(ikt => {
-
-      let descr = ikt.children[4].content[0] == `"` ? ikt.children[4].content.slice(1) : ikt.children[4].content
+      let descr =
+        ikt.children[4].content[0] == `"`
+          ? ikt.children[4].content.slice(1)
+          : ikt.children[4].content
       return (
         <ItemsCard>
           <Header>
+          <img src={ikt.children[6].content} alt={ikt.children[3].content} />
             <div>
               <h3>{ikt.children[2].content}</h3>
               <h4>{ikt.children[3].content}</h4>
               <p>Ціна: {ikt.children[7].content}грн.</p>
+          <a className="buy" href={ikt.children[5].content}>
+            Купити
+          </a>
             </div>
-            <img src={ikt.children[6].content} alt={ikt.children[3].content} />
           </Header>
-          <a className="buy" href={ikt.children[5].content}>Купити</a>
         </ItemsCard>
       )
     })
