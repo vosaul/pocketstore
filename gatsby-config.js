@@ -8,6 +8,10 @@ module.exports = {
   plugins: [
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-image`,
+    `gatsby-plugin-styled-components`,
+    `gatsby-plugin-sass`,
+    `gatsby-plugin-postcss`,
+    `gatsby-plugin-emotion`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -15,6 +19,14 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `xml`,
+        path: `${__dirname}/src/data`,
+      },
+    },
+    `gatsby-transformer-xml`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     {
