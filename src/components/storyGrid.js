@@ -14,7 +14,7 @@ const ItemsGrid = styled.div`
   }
 `
 const ItemsCard = styled.div`
-${tw`shadow-xl p-6 hover:shadow-inner align-middle relative rounded-lg border bg-gray-50 text-gray-700 `}
+  ${tw`shadow-xl p-6 hover:shadow-inner align-middle relative rounded-lg border bg-gray-50 text-gray-700 `}
   display: grid;
   align-content: space-between;
   position: relative;
@@ -82,6 +82,15 @@ const Hint = () => {
     data.allHotlineXml.edges[0].node.xmlChildren[0].children[4].content
   const image =
     data.allHotlineXml.edges[0].node.xmlChildren[0].children[6].content
+  const iUrls = []
+  const gu = data.allHotlineXml.edges.map(item => {
+    const Itt = item.node.xmlChildren.map(ikt => {
+      iUrls.push(ikt.children[6].content)
+    })
+  })
+
+  console.log("WTF")
+  console.log(iUrls)
 
   const Items = data.allHotlineXml.edges.map(item => {
     const Itt = item.node.xmlChildren.map(ikt => {
@@ -92,14 +101,14 @@ const Hint = () => {
       return (
         <ItemsCard>
           <Header>
-          <img src={ikt.children[6].content} alt={ikt.children[3].content} />
+            <img src={ikt.children[6].content} alt={ikt.children[3].content} />
             <div>
               <h3>{ikt.children[2].content}</h3>
               <h4>{ikt.children[3].content}</h4>
               <p>Ціна: {ikt.children[7].content}грн.</p>
-          <a className="buy" href={ikt.children[5].content}>
-            Купити
-          </a>
+              <a className="buy" href={ikt.children[5].content}>
+                Купити
+              </a>
             </div>
           </Header>
         </ItemsCard>

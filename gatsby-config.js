@@ -20,6 +20,14 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-plugin-remote-images`,
+      options: {
+        nodeType: 'CustomNode',
+        imagePath: 'imageUrl',
+        name: 'imageUrl',
+      },
+    },
+    {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `xml`,
