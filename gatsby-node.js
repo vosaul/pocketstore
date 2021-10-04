@@ -17,11 +17,15 @@ const urls = [
   "https://oep2stt.s3-eu-west-1.amazonaws.com/sample-listening-multiple-choice-one-answer/images/main/userCheck.png",
 ]
 
-let iUrls = ["https://liljes-tokt.s3-eu-west-1.amazonaws.com/TemplateData/fullscreen.png"]
-const getUrls = ({ actions: { createPage }, graphql }) => {
-  const data = graphql(`
+let iUrls = [
+  "https://liljes-tokt.s3-eu-west-1.amazonaws.com/TemplateData/fullscreen.png",
+]
+
+sourceNodes = async ({ graphql, reporter, actions, createNodeId, createContentDigest }) => {
+
+ /*  const result = await graphql(`
     {
-      allHotlineXml(filter: { name: { eq: "items" } }, limit: 12) {
+      allHotlineXml(filter: { name: { eq: "items" } }) {
         edges {
           node {
             id
@@ -39,15 +43,34 @@ const getUrls = ({ actions: { createPage }, graphql }) => {
       }
     }
   `)
-  const gu = data.allHotlineXml.edges.map(item => {
-    const Itt = item.node.xmlChildren.map(ikt => {
-      iUrls.push(ikt.children[6].content)
-    })
+  // Handle errors
+  if (result.errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`)
+    return
+  } */
+gu1 = () => {
+  urls.map(url => {
+    iUrls.push(url)
   })
+ /*  result.data.allHotlineXml.edges.map(item => {
+    item.node.xmlChildren.forEach(element => {
+      iUrls.push(element.children[6].content)
+    })
+  }) */
 }
+/* res.data.allHotlineXml.edges.map(item => {
+    item.node.xmlChildren.forEach(element => {
+      iUrls.push(element.children[6].content)
+    })
+  }) */
 
-const sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
- 
+gu1()
+/* 
+gu1 = () => {
+  urls.map(url => {
+    iUrls.push(url)
+  })
+} */
 
   const { createNode } = actions
 
@@ -61,7 +84,7 @@ const sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
       },
     })
   )
-  Promise.all(promises)
+  await Promise.all(promises)
 }
 
 module.exports = {

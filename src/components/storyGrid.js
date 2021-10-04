@@ -5,19 +5,25 @@ import tw, { styled } from "twin.macro"
 
 const ItemsGrid = styled.div`
   display: grid;
-  gap: 20px;
   @media (min-width: 768px) {
     grid-template-columns: 1fr 1fr;
   }
-  @media (min-width: 1200px) {
+  @media (min-width: 920px) {
     grid-template-columns: 1fr 1fr 1fr;
+  }
+  @media (min-width: 1200px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 `
 const ItemsCard = styled.div`
-  ${tw`shadow-xl p-6 hover:shadow-inner align-middle relative rounded-lg border bg-gray-50 text-gray-700 `}
-  display: grid;
-  align-content: space-between;
+  ${tw`shadow-inner align-middle relative border h-full grid justify-items-center`} 
+  grid-tempate-rows: 2fr 1fr;
   position: relative;
+  align-items: end;
+  padding: 16px 16px 28px;
+  p {
+    margin-bottom: 8px;
+  }
   .descr {
     padding: 20px;
     background: #fff;
@@ -32,7 +38,10 @@ const ItemsCard = styled.div`
     display: block;
   }
   .buy {
-    padding: 10px 20px;
+    display: block;
+    margin: 0 auto;
+    width: fit-content;
+    padding: 6px 20px;
     text-align: center;
     background: darkblue;
     color: white;
@@ -41,16 +50,46 @@ const ItemsCard = styled.div`
       Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     height: fit-content;
     border-radius: 8px;
+    align-self: end;
   }
 `
 const Header = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  //grid-template-rows: 30px 60px 30px 50px;
+  align-content: space-between;
+  text-align: center;
+  gap: 10px;
+  img {
+    width: 100%;
+  }
+  h3 {
+    font-size: 20px;
+    font-weight: 500;
+    display: block;
+    padding: 3px 20px;
+    color: #2595df;
+    margin-bottom: 10px;
+  }
+  h4 {
+    font-size: 16px;
+    font-weight: 400;
+    display: block;
+    padding: 3px 20px;
+    color: #2595df;
+    margin-bottom: 10px;
+  }
+  p {
+    color: #666;
+    font-size: 22px;
+    font-weight: 400;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+      Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  }
 `
 const Hint = () => {
   const data = useStaticQuery(graphql`
     query MyQuery {
-      allHotlineXml(filter: { name: { eq: "items" } }, limit: 12) {
+      allHotlineXml(filter: { name: { eq: "items" } }) {
         edges {
           node {
             id
@@ -66,6 +105,22 @@ const Hint = () => {
           }
         }
       }
+      allDataJson {
+        edges {
+          node {
+            id
+            price {
+              categories {
+                category {
+                  name
+                  id
+                  parentId
+                }
+              }
+            }
+          }
+        }
+      }
     }
   `)
   console.log("news=====>")
@@ -74,7 +129,7 @@ const Hint = () => {
     data.allHotlineXml.edges[0].node.xmlChildren[0].children[4].content
   ) */
 
-  const vendor =
+  /*  const vendor =
     data.allHotlineXml.edges[0].node.xmlChildren[0].children[2].content
   const title =
     data.allHotlineXml.edges[0].node.xmlChildren[0].children[3].content
@@ -87,11 +142,22 @@ const Hint = () => {
     const Itt = item.node.xmlChildren.map(ikt => {
       iUrls.push(ikt.children[6].content)
     })
-  })
+  }) */
 
   console.log("WTF")
-  console.log(iUrls)
-
+  console.log(data.allDataJson.edges[0].node.price.categories[0].category)
+  const Cats = data.allDataJson.edges[0].node.price.categories[0].category.map(
+    (cat, i) => {
+      if (cat.parentId === null) {
+        return (
+          <div key={cat.id[0] + "-" + i}>
+            <h4>{cat.name[0]}</h4>
+            <p>ID: {cat.id[0]}</p>
+          </div>
+        )
+      }
+    }
+  )
   const Items = data.allHotlineXml.edges.map(item => {
     const Itt = item.node.xmlChildren.map(ikt => {
       let descr =
@@ -100,17 +166,15 @@ const Hint = () => {
           : ikt.children[4].content
       return (
         <ItemsCard>
-          <Header>
             <img src={ikt.children[6].content} alt={ikt.children[3].content} />
-            <div>
+            <Header>
               <h3>{ikt.children[2].content}</h3>
               <h4>{ikt.children[3].content}</h4>
-              <p>Ціна: {ikt.children[7].content}грн.</p>
+              <p>{ikt.children[7].content}грн.</p>
               <a className="buy" href={ikt.children[5].content}>
                 Купити
               </a>
-            </div>
-          </Header>
+            </Header>
         </ItemsCard>
       )
     })
@@ -125,6 +189,15 @@ const Hint = () => {
         marginBottom: `1.45rem`,
       }}
     >
+      <h2>Категорії товару</h2>
+      <div
+        style={{
+          display: `grid`,
+          gridTemplateColumns: `1fr 1fr 1fr 1fr`,
+        }}
+      >
+        {Cats}
+      </div>
       {Items}
     </div>
   )
