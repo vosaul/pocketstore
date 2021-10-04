@@ -16,7 +16,7 @@ const ItemsGrid = styled.div`
   }
 `
 const ItemsCard = styled.div`
-  ${tw`shadow-inner align-middle relative border h-full grid justify-items-center`} 
+  ${tw`shadow-inner align-middle relative border h-full grid justify-items-center`}
   grid-tempate-rows: 2fr 1fr;
   position: relative;
   align-items: end;
@@ -87,7 +87,7 @@ const Header = styled.div`
   }
 `
 const Hint = () => {
-  const data = useStaticQuery(graphql`
+  const result = useStaticQuery(graphql`
     query MyQuery {
       allHotlineXml(filter: { name: { eq: "items" } }) {
         edges {
@@ -123,11 +123,109 @@ const Hint = () => {
       }
     }
   `)
-  console.log("news=====>")
-  /*  console.log(jsn.price.items.item[0].description)
-  console.log(
-    data.allHotlineXml.edges[0].node.xmlChildren[0].children[4].content
-  ) */
+
+  function slugify(str) {
+    str = str.replace(/^\s+|\s+$/g, "") // trim
+    str = str.toLowerCase()
+
+    let from = [
+      "а",
+      "б",
+      "в",
+      "г",
+      "д",
+      "е",
+      "ж",
+      "з",
+      "и",
+      "й",
+      "к",
+      "л",
+      "м",
+      "н",
+      "о",
+      "п",
+      "р",
+      "с",
+      "т",
+      "у",
+      "ф",
+      "х",
+      "ц",
+      "ч",
+      "ш",
+      "щ",
+      "ъ",
+      "ь",
+      "ю",
+      "я",
+    ]
+    let to = [
+      "a",
+      "b",
+      "v",
+      "g",
+      "d",
+      "e",
+      "zh",
+      "z",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m",
+      "n",
+      "o",
+      "p",
+      "r",
+      "s",
+      "t",
+      "u",
+      "f",
+      "h",
+      "c",
+      "ch",
+      "sh",
+      "sht",
+      "y",
+      "",
+      "iu",
+      "ia",
+    ]
+    for (let key in from) {
+      str = str.replace(new RegExp(from[key], "g"), to[key])
+    }
+
+    str = str
+      .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
+      .replace(/\s+/g, "-") // collapse whitespace and replace by -
+      .replace(/-+/g, "-") // collapse dashes
+
+    return str
+  }
+
+  function topLevel(dd) {
+    let list = []
+    console.log(dd[0], "35lk4")
+for (let index = 0; index < dd.length; index++) {
+  const el = dd[index];
+  if (el.parentId === null) {
+    list.push(el)
+  }
+}
+console.log("list:", list)
+    return list
+  }
+  let dd = result.allDataJson.edges[0].node.price.categories[0].category
+  const assa = topLevel(dd)
+  console.log(assa)
+  console.log("<============news=====>")
+  /* let name =
+    result.data.allDataJson.edges[0].node.price.categories[0].category[0].name[0]
+  console.log(name) */
+  /* console.log(dd) */
+  /* let Arr = topLevel() */
+  //console.log(result.data.allDataJson.edges[0].node.price.categories[0])
 
   /*  const vendor =
     data.allHotlineXml.edges[0].node.xmlChildren[0].children[2].content
@@ -144,9 +242,9 @@ const Hint = () => {
     })
   }) */
 
-  console.log("WTF")
-  console.log(data.allDataJson.edges[0].node.price.categories[0].category)
-  const Cats = data.allDataJson.edges[0].node.price.categories[0].category.map(
+  //console.log("WTF")
+  //console.log(result.data.allDataJson.edges[0].node.price.categories[0].category)
+  const Cats = result.allDataJson.edges[0].node.price.categories[0].category.map(
     (cat, i) => {
       if (cat.parentId === null) {
         return (
@@ -158,7 +256,7 @@ const Hint = () => {
       }
     }
   )
-  const Items = data.allHotlineXml.edges.map(item => {
+  const Items = result.allHotlineXml.edges.map(item => {
     const Itt = item.node.xmlChildren.map(ikt => {
       let descr =
         ikt.children[4].content[0] == `"`
@@ -166,15 +264,15 @@ const Hint = () => {
           : ikt.children[4].content
       return (
         <ItemsCard>
-            <img src={ikt.children[6].content} alt={ikt.children[3].content} />
-            <Header>
-              <h3>{ikt.children[2].content}</h3>
-              <h4>{ikt.children[3].content}</h4>
-              <p>{ikt.children[7].content}грн.</p>
-              <a className="buy" href={ikt.children[5].content}>
-                Купити
-              </a>
-            </Header>
+          <img src={ikt.children[6].content} alt={ikt.children[3].content} loading="lazy"/>
+          <Header>
+            <h3>{ikt.children[2].content}</h3>
+            <h4>{ikt.children[3].content}</h4>
+            <p>{ikt.children[7].content}грн.</p>
+            <a className="buy" href={ikt.children[5].content}>
+              Купити
+            </a>
+          </Header>
         </ItemsCard>
       )
     })
@@ -202,5 +300,4 @@ const Hint = () => {
     </div>
   )
 }
-
 export default Hint

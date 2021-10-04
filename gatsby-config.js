@@ -1,9 +1,11 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
+    title: `Інтернет-магазин мобільних аксесуарів і техніки PocketStore`,
+    description: `Купити чохол на телефон на PocketStore. ➔ Низькі ціни. ☝ Замовити оригінальні чохли на будь-які мобільні телефони. ➤ Продаж чохлів онлайн. Самовивіз і доставка в Київ, Одесу, Харків, Львів, Дніпро і по всій Україні.`,
     author: `@gatsbyjs`,
     siteUrl: `https://gatsbystarterdefaultsource.gatsbyjs.io/`,
+    slogan: `Спеціалізовані магазини мобільних аксесуарів`,
+    sloganShort: `Магазини мобільних аксесуарів`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -12,6 +14,7 @@ module.exports = {
     `gatsby-plugin-sass`,
     `gatsby-plugin-postcss`,
     `gatsby-plugin-emotion`,
+    `gatsby-plugin-sitemap`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {

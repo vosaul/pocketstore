@@ -1,41 +1,21 @@
-/**
- * Implement Gatsby's Node APIs in this file.
- *
- * See: https://www.gatsbyjs.com/docs/node-apis/
- */
-
-// You can delete this file if you're not using it
-
-const urls = [
-  "https://liljes-tokt.s3-eu-west-1.amazonaws.com/TemplateData/fullscreen.png",
-  "https://liljes-tokt.s3-eu-west-1.amazonaws.com/TemplateData/webgl-logo.png",
-  "https://liljes-tokt.s3-eu-west-1.amazonaws.com/TemplateData/progressLogo.Dark.png",
-  "https://liljes-tokt.s3-eu-west-1.amazonaws.com/TemplateData/progressEmpty.Dark.png",
-  "https://liljes-tokt.s3-eu-west-1.amazonaws.com/TemplateData/progressFull.Dark.png",
-  "https://oep2stt.s3-eu-west-1.amazonaws.com/sample-listening-multiple-choice-one-answer/images/banner/IELTSlogo.png",
-  "https://oep2stt.s3-eu-west-1.amazonaws.com/sample-listening-multiple-choice-one-answer/images/banner/IELTSpartners.jpg",
-  "https://oep2stt.s3-eu-west-1.amazonaws.com/sample-listening-multiple-choice-one-answer/images/main/userCheck.png",
-]
-
-let iUrls = [
-  "https://liljes-tokt.s3-eu-west-1.amazonaws.com/TemplateData/fullscreen.png",
-]
-
-sourceNodes = async ({ graphql, reporter, actions, createNodeId, createContentDigest }) => {
-
- /*  const result = await graphql(`
+exports.createPages = async ({ actions, graphql, reporter }) => {
+  const { createPage } = actions
+  const categoryTemplate = require.resolve(
+    `./src/templates/categoryTemplate.js`
+  )
+  const result = await graphql(`
     {
-      allHotlineXml(filter: { name: { eq: "items" } }) {
+      allDataJson {
         edges {
           node {
             id
-            name
-            content
-            xmlChildren {
-              name
-              children {
-                name
-                content
+            price {
+              categories {
+                category {
+                  name
+                  id
+                  parentId
+                }
               }
             }
           }
@@ -47,46 +27,113 @@ sourceNodes = async ({ graphql, reporter, actions, createNodeId, createContentDi
   if (result.errors) {
     reporter.panicOnBuild(`Error while running GraphQL query.`)
     return
-  } */
-gu1 = () => {
-  urls.map(url => {
-    iUrls.push(url)
+  }
+  function slugify(str) {
+    str = str.replace(/^\s+|\s+$/g, "") // trim
+    str = str.toLowerCase()
+
+    let from = [
+      "а",
+      "б",
+      "в",
+      "г",
+      "д",
+      "е",
+      "ж",
+      "з",
+      "и",
+      "й",
+      "к",
+      "л",
+      "м",
+      "н",
+      "о",
+      "п",
+      "р",
+      "с",
+      "т",
+      "у",
+      "ф",
+      "х",
+      "ц",
+      "ч",
+      "ш",
+      "щ",
+      "ъ",
+      "ь",
+      "ю",
+      "я",
+    ]
+    let to = [
+      "a",
+      "b",
+      "v",
+      "g",
+      "d",
+      "e",
+      "zh",
+      "z",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m",
+      "n",
+      "o",
+      "p",
+      "r",
+      "s",
+      "t",
+      "u",
+      "f",
+      "h",
+      "c",
+      "ch",
+      "sh",
+      "sht",
+      "y",
+      "",
+      "iu",
+      "ia",
+    ]
+    for (let key in from) {
+      str = str.replace(new RegExp(from[key], "g"), to[key])
+    }
+
+    str = str
+      .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
+      .replace(/\s+/g, "-") // collapse whitespace and replace by -
+      .replace(/-+/g, "-") // collapse dashes
+
+    return str
+  }
+  // top level categories
+  function topLevel(dd) {
+    let list = []
+    for (let index = 0; index < dd.length; index++) {
+      const el = dd[index]
+      if (el.parentId === null) {
+        list.push(el)
+      }
+    }
+    return list
+  }
+  let catList = topLevel(result.data.allDataJson.edges[0].node.price.categories[0].category)
+  /* result.data.allDataJson.edges[0].node.price.categories[0].category(({ cat }, index) => { */
+  let nameCat =
+    result.data.allDataJson.edges[0].node.price.categories[0].category[0]
+      .name[0]
+  let slug = slugify(nameCat)
+  let catId =
+    result.data.allDataJson.edges[0].node.price.categories[0].category[0].id[0]
+  createPage({
+    path: "categories",
+    component: categoryTemplate,
+    context: {
+      // additional data can be passed via context
+      title: "Список категорій верхнього рівня" /*  cat.name[0], */,
+      catList: catList,
+    },
   })
- /*  result.data.allHotlineXml.edges.map(item => {
-    item.node.xmlChildren.forEach(element => {
-      iUrls.push(element.children[6].content)
-    })
-  }) */
-}
-/* res.data.allHotlineXml.edges.map(item => {
-    item.node.xmlChildren.forEach(element => {
-      iUrls.push(element.children[6].content)
-    })
-  }) */
-
-gu1()
-/* 
-gu1 = () => {
-  urls.map(url => {
-    iUrls.push(url)
-  })
-} */
-
-  const { createNode } = actions
-
-  const promises = iUrls.map(imageUrl =>
-    createNode({
-      id: createNodeId(`customNode-${imageUrl}`),
-      imageUrl,
-      internal: {
-        type: "CustomNode",
-        contentDigest: createContentDigest(imageUrl),
-      },
-    })
-  )
-  await Promise.all(promises)
-}
-
-module.exports = {
-  sourceNodes,
+  /* }); */
 }

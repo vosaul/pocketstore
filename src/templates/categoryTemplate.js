@@ -3,7 +3,7 @@ import Layout from "../components/layout"
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
 import { graphql } from "gatsby"
 import tw, { styled } from "twin.macro"
-import {Link} from "gatsby"
+import { Link } from "gatsby"
 import Seo from "../components/seo"
 
 const Section = styled.section`
@@ -37,7 +37,7 @@ const PaN = styled.div`
     border-radius: 5px;
   }
 `
-export const query = graphql`
+/* export const query = graphql`
   query ($images: String!) {
     allFile(filter: { relativePath: { regex: $images } }) {
       edges {
@@ -56,30 +56,23 @@ export const query = graphql`
       }
     }
   }
-`
+` */
 
-const PortfolioPage = ({ pageContext, data }) => {
-  const PrevNext = () => {
-  var next = pageContext.next
-    ? "/portfolio/" + pageContext.next
-    : pageContext.next
-  var prev = pageContext.prev
-    ? "/portfolio/" + pageContext.prev
-    : pageContext.prev
-  
-      return (
-        <PaN>
-          {next ? <Link to={next}>⬅️ Наступне </Link> : ""}
-          {prev ? <Link to={prev}>Попереднє ➡️</Link> : ""}
-        </PaN>
-      )
-    }
+const CategoryPage = ({ pageContext, data }) => {
+  const catItems = pageContext.catList.map(cat => {
+    return (
+      <div key={cat.id[0]}>
+        <h3>{cat.name}</h3>
+        <p>Id: {cat.id}</p>
+      </div>
+    )
+  })
   return (
     <Layout>
       <Seo title={pageContext.title} />
       <Section>
         <SectionHeader>
-          <h2
+          <h1
             style={{
               fontFamily: "Caveat, cursive",
               fontSize: "42px",
@@ -87,23 +80,13 @@ const PortfolioPage = ({ pageContext, data }) => {
             }}
           >
             {pageContext.title}
-          </h2>
-          <p>
-            <i>{pageContext.content}</i>
-          </p>
-          <b>індекс: {pageContext.rel}</b>
-          <p>{pageContext.available}</p>
-          <PrevNext />
+          </h1>
+          {/* <h2>{pageContext.subtitle}</h2> */}
+          <div>{catItems}</div>
         </SectionHeader>
-        {data.allFile.edges.map(item => (
-          <ImgWrapper key={item.node.id}>
-            <GatsbyImage image={getImage(item.node)} alt={pageContext.title} />
-          </ImgWrapper>
-        ))}
-        <PrevNext />
       </Section>
     </Layout>
   )
 }
 
-export default PortfolioPage
+export default CategoryPage

@@ -9,7 +9,7 @@ const ItemsGrid = styled.div`
     grid-template-columns: 1fr 1fr;
   }
   @media (min-width: 920px) {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;node.frontmatter.slug
   }
   @media (min-width: 1200px) {
     grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -37,29 +37,9 @@ const Cats = () => {
       }
     }
   `)
-  console.log("news=====>")
-  /*  console.log(jsn.price.items.item[0].description)
-  console.log(
-    data.allHotlineXml.edges[0].node.xmlChildren[0].children[4].content
-  ) */
+ // console.log("news=====>")
 
-  /*  const vendor =
-    data.allHotlineXml.edges[0].node.xmlChildren[0].children[2].content
-  const title =
-    data.allHotlineXml.edges[0].node.xmlChildren[0].children[3].content
-  const text =
-    data.allHotlineXml.edges[0].node.xmlChildren[0].children[4].content
-  const image =
-    data.allHotlineXml.edges[0].node.xmlChildren[0].children[6].content
-  const iUrls = []
-  const gu = data.allHotlineXml.edges.map(item => {
-    const Itt = item.node.xmlChildren.map(ikt => {
-      iUrls.push(ikt.children[6].content)
-    })
-  }) */
-
-  console.log("WTF")
-  console.log(data.allDataJson.edges[0].node.price.categories[0].category)
+ // console.log(data.allDataJson.edges[0].node.price.categories[0].category)
   const Cats = data.allDataJson.edges[0].node.price.categories[0].category.map(
     (cat, i) => {
       if (cat.parentId === null) {

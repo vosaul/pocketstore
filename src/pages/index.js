@@ -21,11 +21,11 @@ const Button = styled.button`
 const IndexPage = () => (
   <Layout>
     <Seo title="Home" />
-    <h1>Рендеринг XML</h1>
+    <h1>Інтернет-магазин мобільних аксесуарів і техніки PocketStore</h1>
     <p>
       <h2>Дані з XML файлу:</h2>
       <Button>
-        <Link to="/page-2/">Каталог товарів</Link>
+        <Link to="/items/">Каталог товарів</Link>
       </Button>
       <br />
     </p>

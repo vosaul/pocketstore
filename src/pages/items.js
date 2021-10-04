@@ -21,7 +21,7 @@ const Button = styled.button`
 const SecondPage = () => (
   <Layout>
     <Seo title="Page two" />
-    <h1>Каталог товарів з hotline.xml</h1>
+    <h1>Каталог товарів</h1>
     <Button>
       <Link to="/">На головну </Link>
     </Button>
