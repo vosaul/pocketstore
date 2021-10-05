@@ -25,7 +25,7 @@ const SecondPage = () => (
     <Button>
       <Link to="/">На головну </Link>
     </Button>
-    <Hint />
+    {/* <Hint /> */}
   </Layout>
 )
 

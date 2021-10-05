@@ -7,9 +7,8 @@ import { Link } from "gatsby"
 import Seo from "../components/seo"
 
 const Section = styled.section`
-  ${tw`grid justify-items-center auto-rows-auto mx-auto`}
-  gap: 30px;
-  max-width: 1300px;
+   max-width: 1300px;
+   margin: 50px auto;
 `
 const SectionHeader = styled.div`
   width: 100%;
@@ -37,36 +36,138 @@ const PaN = styled.div`
     border-radius: 5px;
   }
 `
-/* export const query = graphql`
-  query ($images: String!) {
-    allFile(filter: { relativePath: { regex: $images } }) {
-      edges {
-        node {
-          relativePath
-          id
-          base
-          childImageSharp {
-            gatsbyImageData(
-              quality: 50
-              formats: WEBP
-              webpOptions: { quality: 50 }
-            )
+const ItemsGrid = styled.div`
+  display: grid;
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (min-width: 920px) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  @media (min-width: 1200px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+`
+const ItemsCard = styled.div`
+  ${tw`shadow-inner align-middle relative border h-full grid justify-items-center`}
+  grid-tempate-rows: 2fr 1fr;
+  position: relative;
+  align-items: end;
+  padding: 16px 16px 28px;
+  p {
+    margin-bottom: 8px;
+  }
+  .descr {
+    padding: 20px;
+    background: #fff;
+    display: none;
+    position: fixed;
+    top: 100px;
+    width: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  &:hover .descr {
+    display: block;
+  }
+  .buy {
+    display: block;
+    margin: 0 auto;
+    width: fit-content;
+    padding: 6px 20px;
+    text-align: center;
+    background: darkblue;
+    color: white;
+    font-size: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+      Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    height: fit-content;
+    border-radius: 8px;
+    align-self: end;
+  }
+`
+const Header = styled.div`
+  display: grid;
+  //grid-template-rows: 30px 60px 30px 50px;
+  align-content: space-between;
+  text-align: center;
+  gap: 10px;
+  img {
+    width: 100%;
+  }
+  h3 {
+    font-size: 20px;
+    font-weight: 500;
+    display: block;
+    padding: 3px 20px;
+    color: #2595df;
+    margin-bottom: 10px;
+  }
+  h4 {
+    font-size: 16px;
+    font-weight: 400;
+    display: block;
+    padding: 3px 20px;
+    color: #2595df;
+    margin-bottom: 10px;
+  }
+  p {
+    color: #666;
+    font-size: 22px;
+    font-weight: 400;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+      Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  }
+`
+
+export const query = graphql`
+query CateQuery {
+  allDataJson {
+    edges {
+      node {
+        id
+        price {
+          categories {
+            category {
+              name
+              id
+              parentId
+            }
+          }
+          items {
+            item {
+              categoryId
+              description
+              image
+              name
+              priceRUAH
+              url
+            }
           }
         }
       }
     }
   }
-` */
-
+}
+`
 const CategoryPage = ({ pageContext, data }) => {
-  const catItems = pageContext.catList.map(cat => {
-    return (
-      <div key={cat.id[0]}>
-        <h3>{cat.name}</h3>
-        <p>Id: {cat.id}</p>
-      </div>
-    )
+
+  const Items = data.allDataJson.edges[0].node.price.items[0].item.map( item => {
+    /* console.log(item, pageContext.id) */
+    if (item.categoryId[0] === pageContext.id ) {
+      return (
+<ItemsCard >
+  <img src={item.image[0]} alt="..." />
+  <Header>
+        <h4>{item.name[0]}</h4> 
+        <p> {item.priceRUAH[0]} грн.</p>
+        <p className="buy">Купити</p>
+</Header>
+        </ItemsCard>
+      )
+    }
   })
+ 
   return (
     <Layout>
       <Seo title={pageContext.title} />
@@ -81,9 +182,11 @@ const CategoryPage = ({ pageContext, data }) => {
           >
             {pageContext.title}
           </h1>
-          {/* <h2>{pageContext.subtitle}</h2> */}
-          <div>{catItems}</div>
+          <p>id: {pageContext.id}</p>
         </SectionHeader>
+        <ItemsGrid>
+        {Items}
+        </ItemsGrid>
       </Section>
     </Layout>
   )

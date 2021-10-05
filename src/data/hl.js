@@ -2,7 +2,7 @@ const xml2js = require('xml2js');
 const fs = require('fs');
 
 // read XML from a file
-const xml = fs.readFileSync('./hotline.xml');
+const xml = fs.readFileSync('./_draft/full/hotline.xml');
 console.log("convert xml to json");
 // convert XML to JSON
 (async () => {
