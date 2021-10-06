@@ -1,4 +1,5 @@
-exports.createPages = async ({ actions, graphql, reporter }) => {
+exports.createPages = async ({ actions, graphql, reporter, createNodeId, createContentDigest }) => {
+
   const { createPage } = actions
   const categoryTemplate = require.resolve(
     `./src/templates/categoryTemplate.js`

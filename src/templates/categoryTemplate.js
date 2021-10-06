@@ -119,7 +119,18 @@ const Header = styled.div`
       Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   }
 `
-
+const Button = styled.button`
+  padding: 10px 20px;
+  text-align: center;
+  background: darkblue;
+  color: white;
+  font-size: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  height: fit-content;
+  border-radius: 8px;
+  margin-bottom: 30px;
+`
 export const query = graphql`
 query CateQuery {
   allDataJson {
@@ -183,6 +194,9 @@ const CategoryPage = ({ pageContext, data }) => {
             {pageContext.title}
           </h1>
           <p>id: {pageContext.id}</p>
+          <Button>
+      <Link to="/">На головну </Link>
+    </Button>
         </SectionHeader>
         <ItemsGrid>
         {Items}

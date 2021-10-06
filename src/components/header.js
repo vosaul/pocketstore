@@ -52,14 +52,14 @@ const Header = ({ siteTitle }) => (
             <img src="../images/logo.svg" alt="logo" />
           </Link>
         </Logo>
-        <Nav>
+     {/*    <Nav>
           <Link to="/categories" title="Категорії">
             Категорії
           </Link>
           <Link to="/items" title="Товар">
             Товар
           </Link>
-        </Nav>
+        </Nav> */}
       </Container>
     </TopHeader>
   </HeaderBox>
