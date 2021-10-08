@@ -205,7 +205,7 @@ const CategoryPage = ({ data }) => {
               fontWeight: "300",
             }}
           >
-            Phptos
+            Оптимізація віддалених зображень локально
           </h1>
           <Button>
             <Link to="/">На головну </Link>

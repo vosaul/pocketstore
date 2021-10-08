@@ -1,14 +1,10 @@
 const Items = require("./src/data/hl.json")
-//const Images = require("./src/remote/images.json")
 
 exports.createPages = async ({ actions, graphql, reporter }) => {
 
   const { createPage } = actions
   const categoryTemplate = require.resolve(
     `./src/templates/categoryTemplate.js`
-  )
-  const categoriesList = require.resolve(
-    `./src/templates/categoriesList.js`
   )
   const result = await graphql(`
     {
@@ -24,15 +20,6 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
                   parentId
                 }
               }
-              items {
-                item {
-                  categoryId
-                  id
-                  image
-                  name
-                  priceRUAH
-                }
-              }
             }
           }
         }
@@ -44,7 +31,6 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     reporter.panicOnBuild(`Error while running GraphQL query.`)
     return
   }
-  //console.log("files",Images)
   function slugify(str) {
     str = str.replace(/^\s+|\s+$/g, "") // trim
     str = str.toLowerCase()
@@ -64,7 +50,6 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   
     return str
   }
-
   // top level categories
   function topLevel(item) {
     let list = []
@@ -76,10 +61,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     }
     return list
   }
-
   let catList = topLevel(result.data.allDataJson.edges[0].node.price.categories[0].category)
-
-console.log("CATEGORIES===========>",catList)
 
     catList.forEach(parent => {
       let arr = result.data.allDataJson.edges[0].node.price.categories[0].category
@@ -99,21 +81,6 @@ console.log("CATEGORIES===========>",catList)
         }
       }
   })
-
-  let images = []
-  result.data.allDataJson.edges[0].node.price.items[0].item.map( it => {
-    images.push(it.image[0])
-  })
-  createPage({
-    path: "/list",
-    component: categoriesList,
-    context: {
-      // aitemitional data can be passed via context
-      title: "Список зображень",
-      list: images,
-    },
-  })
- 
 }
 
 const sourceNodes = async ({ actions, createNodeId, createContentDigest }) => {
