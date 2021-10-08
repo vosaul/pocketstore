@@ -105,7 +105,7 @@ console.log("CATEGORIES===========>",catList)
     images.push(it.image[0])
   })
   createPage({
-    path: "list",
+    path: "/list",
     component: categoriesList,
     context: {
       // aitemitional data can be passed via context
