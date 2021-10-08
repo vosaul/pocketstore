@@ -1,5 +1,7 @@
-const Items = require("./src/data/hl.json")
-//const Images = require("./src/remote/images.json")
+const path = require("path");
+
+const fs = require("fs")
+//const Images = require("./src/data/images.json")
 
 exports.createPages = async ({ actions, graphql, reporter }) => {
 
@@ -44,7 +46,6 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     reporter.panicOnBuild(`Error while running GraphQL query.`)
     return
   }
-  //console.log("files",Images)
   function slugify(str) {
     str = str.replace(/^\s+|\s+$/g, "") // trim
     str = str.toLowerCase()
@@ -78,7 +79,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   }
 
   let catList = topLevel(result.data.allDataJson.edges[0].node.price.categories[0].category)
-console.log(catList)
+
     catList.forEach(parent => {
       let arr = result.data.allDataJson.edges[0].node.price.categories[0].category
       for (let index = 0; index < arr.length; index++) {
@@ -98,10 +99,10 @@ console.log(catList)
       }
   })
 
-  /* let images = []
+  let images = []
   result.data.allDataJson.edges[0].node.price.items[0].item.map( it => {
     images.push(it.image[0])
-  }) */
+  })
  /*  createPage({
     path: "categories",
     component: categoriesList,
@@ -112,31 +113,24 @@ console.log(catList)
     },
   }) */
  
-}
-
-const sourceNodes = async ({ actions, createNodeId, createContentDigest }) => {
-//console.log(Images.images[0])
-const remoteItems = Items.price.items[0].item.map( item => {
-  return (
-       item.image[0]
-   )
-})
-/* const remoteItems = Items.price.items[0].item */
-/* console.log("REMOTE ITEMS =====>", remoteItems) */
-const { createNode } = actions
-const promises = remoteItems.map(Item =>
-  createNode({
-    id: createNodeId(`addRemoteImageNode-${Item}`),
-    Item,
-    internal: {
-      type: "addRemoteImageNode",
-      contentDigest: createContentDigest(Item),
-    },
-  })
-)
-await Promise.all(promises)
+  
+  const sourceNodes = async ({ actions, createNodeId, createContentDigest }) => {
+  console.log(Images.images[0])
+  const { createNode } = actions
+  const promises = images.map(imageUrl =>
+    createNode({
+      id: createNodeId(`addRemoteImageNode-${imageUrl}`),
+      imageUrl,
+      internal: {
+        type: "addRemoteImageNode",
+        contentDigest: createContentDigest(imageUrl),
+      },
+    })
+  )
+  await Promise.all(promises)
 
 }
-module.exports = {
-  sourceNodes
+  module.exports = {
+    sourceNodes
+  }
 }

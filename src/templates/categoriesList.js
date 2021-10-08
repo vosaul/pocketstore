@@ -7,8 +7,8 @@ import { Link } from "gatsby"
 import Seo from "../components/seo"
 
 const Section = styled.section`
-  max-width: 1300px;
-  margin: 50px auto;
+   max-width: 1300px;
+   margin: 50px auto;
 `
 const SectionHeader = styled.div`
   width: 100%;
@@ -131,71 +131,59 @@ const Button = styled.button`
   border-radius: 8px;
   margin-bottom: 30px;
 `
-export const query = graphql`
-  query PhotosCateQuery {
-    allDataJson {
-      edges {
-        node {
-          id
-          price {
-            categories {
-              category {
-                name
-                id
-                parentId
-              }
-            }
-            items {
-              item {
-                categoryId
-                description
-                image
-                name
-                priceRUAH
-                url
-              }
+/* export const query = graphql`
+query CateListQuery {
+  allDataJson {
+    edges {
+      node {
+        id
+        price {
+          categories {
+            category {
+              name
+              id
+              parentId
             }
           }
-        }
-      }
-    }
-    allImageSharp(limit: 32, skip: 14) {
-      edges {
-        node {
-          gatsbyImageData(
-            formats: WEBP
-            quality: 50
-            webpOptions: { quality: 50 }
-            width: 300
-          )
-          original {
-            src
+          items {
+            item {
+              categoryId
+              description
+              image
+              name
+              priceRUAH
+              url
+            }
           }
         }
       }
     }
   }
-`
-const CategoryPage = ({ data }) => {
-  const Items = data.allImageSharp.edges.map(item => {
-    console.log(item.node)
-    const image = getImage(item.node)
-
-    return (
-      <ItemsCard>
-     <GatsbyImage image={image} alt="..." />
-        <Header>
-          <h4>Товар</h4>
-          <p> 300 грн.</p>
-          <p className="buy">Купити</p>
-        </Header>
-      </ItemsCard>
-    )
+}
+` */
+const CategoryListPage = ({ pageContext }) => {
+//console.log("List of images",pageContext.list)
+  /* const Items = data.allDataJson.edges[0].node.price.items[0].item.map( item => {
+    if (item.categoryId[0] === pageContext.id ) {
+      return (
+<ItemsCard >
+  <img src={item.image[0]} alt="..." />
+  <Header>
+        <h4>{item.name[0]}</h4> 
+        <p> {item.priceRUAH[0]} грн.</p>
+        <p className="buy">Купити</p>
+</Header>
+        </ItemsCard>
+      )
+    }
   })
-
+  */
+ const ImagesList = pageContext.list.map( (imageItem, i) =>{
+   return <p><a href={imageItem[0]} key={i}>{imageItem}</a></p>
+ })
   return (
     <Layout>
-      <Seo title="Photos" />
+      <Seo title={pageContext.title} />
       <Section>
         <SectionHeader>
           <h1
@@ -205,16 +193,20 @@ const CategoryPage = ({ data }) => {
               fontWeight: "300",
             }}
           >
-            Phptos
+            {pageContext.title}
           </h1>
+          {/* <p>id: {pageContext.id}</p> */}
           <Button>
-            <Link to="/">На головну </Link>
-          </Button>
+      <Link to="/">На головну </Link>
+    </Button>
         </SectionHeader>
-        <ItemsGrid>{Items}</ItemsGrid>
+       {/*  <ItemsGrid>
+        {Items}
+        </ItemsGrid> */}
+        {ImagesList}
       </Section>
     </Layout>
   )
 }
 
-export default CategoryPage
+export default CategoryListPage

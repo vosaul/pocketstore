@@ -89,22 +89,6 @@ const Header = styled.div`
 const Hint = () => {
   const result = useStaticQuery(graphql`
     query MyQuery {
-      allHotlineXml(filter: { name: { eq: "items" } }) {
-        edges {
-          node {
-            id
-            name
-            content
-            xmlChildren {
-              name
-              children {
-                name
-                content
-              }
-            }
-          }
-        }
-      }
       allDataJson {
         edges {
           node {
@@ -136,7 +120,7 @@ const Hint = () => {
       }
     }
   )
-  const Items = result.allHotlineXml.edges.map(item => {
+  const Items = result.allDataJson.edges.map(item => {
     const Itt = item.node.xmlChildren.map(ikt => {
       let descr =
         ikt.children[4].content[0] == `"`

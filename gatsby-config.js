@@ -22,14 +22,14 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
-    /* {
+    {
       resolve: `gatsby-plugin-remote-images`,
       options: {
-        nodeType: 'CustomNode',
-        imagePath: 'imageUrl',
+        nodeType: 'addRemoteImageNode',
+        imagePath: 'Item',
         name: 'imageUrl',
       },
-    }, */
+    },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -47,6 +47,7 @@ module.exports = {
     `gatsby-transformer-xml`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
+    `gatsby-plugin-image`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {

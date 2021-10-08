@@ -24,9 +24,9 @@ const IndexPage = () => (
     <h1>Інтернет-магазин мобільних аксесуарів і техніки PocketStore</h1>
     <p>
       <h2>Дані з XML файлу:</h2>
-      {/* <Button>
+      <Button>
         <Link to="/items/">Каталог товарів</Link>
-      </Button> */}
+      </Button>
       <br />
     </p>
     <Cats />
