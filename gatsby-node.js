@@ -1,5 +1,28 @@
 const Items = require("./src/data/hl.json")
 
+exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => {
+  //console.log(Images.images[0])
+  const remoteItems = Items.price.items[0].item.map( item => {
+    return (
+         item.image[0]
+     )
+  })
+  /* const remoteItems = Items.price.items[0].item */
+  /* console.log("REMOTE ITEMS =====>", remoteItems) */
+  const { createNode } = actions
+  const promises = remoteItems.map(Item =>
+    createNode({
+      id: createNodeId(`addRemoteImageNode-${Item}`),
+      Item,
+      internal: {
+        type: "addRemoteImageNode",
+        contentDigest: createContentDigest(Item),
+      },
+    })
+  )
+  await Promise.all(promises)
+}
+
 exports.createPages = async ({ actions, graphql, reporter }) => {
 
   const { createPage } = actions
@@ -83,29 +106,6 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   })
 }
 
-const sourceNodes = async ({ actions, createNodeId, createContentDigest }) => {
-//console.log(Images.images[0])
-const remoteItems = Items.price.items[0].item.map( item => {
-  return (
-       item.image[0]
-   )
-})
-/* const remoteItems = Items.price.items[0].item */
-/* console.log("REMOTE ITEMS =====>", remoteItems) */
-const { createNode } = actions
-const promises = remoteItems.map(Item =>
-  createNode({
-    id: createNodeId(`addRemoteImageNode-${Item}`),
-    Item,
-    internal: {
-      type: "addRemoteImageNode",
-      contentDigest: createContentDigest(Item),
-    },
-  })
-)
-await Promise.all(promises)
-
-}
-module.exports = {
+/* module.exports = {
   sourceNodes
-}
+} */
