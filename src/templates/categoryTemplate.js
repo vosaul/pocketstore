@@ -162,7 +162,6 @@ query CateQuery {
 }
 `
 const CategoryPage = ({ pageContext, data }) => {
-
   const Items = data.allDataJson.edges[0].node.price.items[0].item.map( item => {
     /* console.log(item, pageContext.id) */
     if (item.categoryId[0] === pageContext.id ) {

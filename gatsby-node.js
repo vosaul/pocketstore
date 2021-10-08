@@ -78,7 +78,9 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   }
 
   let catList = topLevel(result.data.allDataJson.edges[0].node.price.categories[0].category)
-console.log(catList)
+
+console.log("CATEGORIES===========>",catList)
+
     catList.forEach(parent => {
       let arr = result.data.allDataJson.edges[0].node.price.categories[0].category
       for (let index = 0; index < arr.length; index++) {
@@ -98,19 +100,19 @@ console.log(catList)
       }
   })
 
-  /* let images = []
+  let images = []
   result.data.allDataJson.edges[0].node.price.items[0].item.map( it => {
     images.push(it.image[0])
-  }) */
- /*  createPage({
-    path: "categories",
+  })
+  createPage({
+    path: "list",
     component: categoriesList,
     context: {
       // aitemitional data can be passed via context
       title: "Список зображень",
       list: images,
     },
-  }) */
+  })
  
 }
 
