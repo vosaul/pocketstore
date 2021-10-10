@@ -4,21 +4,34 @@ exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => 
   //console.log(Images.images[0])
   const remoteItems = Items.price.items[0].item.map( item => {
     return (
-      [
-         item.image[0],
-         item.name[0]
-      ]
+         item.image[0]
      )
   })
+  const remItems = Items.price.items[0].item.map( item => {
+    return (
+    {
+        "categoryId" : item.categoryId[0],
+        "vendor" : item.vendor[0],
+        "image" : item.image[0],
+        "name": item.name[0],
+        "priceRUAH" : item.priceRUAH[0],
+    }
+     )
+  })
+
   /* const remoteItems = Items.price.items[0].item */
-  console.log("REMOTE ITEMS =====>", remoteItems)
+  {console.log("REMOTE ITEMS =====>", remItems)}
   const { createNode } = actions
-  const promises = remoteItems.map(Item =>
+  const promises = remItems.map(Item =>
     createNode({
-      id: createNodeId(`addRemoteImageNode-${Item[0]}`),
-      Item,
-      internal: {
-        type: "addRemoteImageNode",
+      id: createNodeId(`remoteImages-${Item.image}`),
+        itemCategoryId: Item.categoryId,
+        itemUrl: Item.image,
+        itemVendor: Item.vendor,
+        itemName: Item.name,
+        itemPrice: Item.priceRUAH,
+        internal: {
+        type: "remoteImages",
         contentDigest: createContentDigest(Item),
       },
     })

@@ -22,12 +22,22 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
+ /*    {
+      resolve: `gatsby-plugin-remote-images`,
+      options: {
+        nodeType: 'remoteImages',
+        imagePath: 'itemUrl',
+        name: 'imageUrl',
+      },
+    }, */
     {
       resolve: `gatsby-plugin-remote-images`,
       options: {
-        nodeType: 'addRemoteImageNode',
-        imagePath: 'Item',
-        name: 'imageUrl',
+        nodeType: 'remoteImages',
+        imagePath: 'itemUrl',
+        // OPTIONAL: Name you want to give new image field on the node.
+        // Defaults to 'localImage'.
+        name: 'advItemImages',
       },
     },
     {

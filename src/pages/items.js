@@ -133,43 +133,16 @@ const Button = styled.button`
 `
 export const query = graphql`
   query PhotosCateQuery {
-    allDataJson {
+    allRemoteImages {
       edges {
         node {
-          id
-          price {
-            categories {
-              category {
-                name
-                id
-                parentId
-              }
+          itemName
+          itemPrice
+          itemCategoryId
+          advItemImages {
+            childImageSharp {
+              gatsbyImageData(formats: WEBP, webpOptions: {quality: 50}, width: 300)
             }
-            items {
-              item {
-                categoryId
-                description
-                image
-                name
-                priceRUAH
-                url
-              }
-            }
-          }
-        }
-      }
-    }
-    allImageSharp(limit: 32, skip: 14) {
-      edges {
-        node {
-          gatsbyImageData(
-            formats: WEBP
-            quality: 50
-            webpOptions: { quality: 50 }
-            width: 300
-          )
-          original {
-            src
           }
         }
       }
@@ -177,16 +150,15 @@ export const query = graphql`
   }
 `
 const CategoryPage = ({ data }) => {
-  const Items = data.allImageSharp.edges.map(item => {
-    console.log(item.node)
-    const image = getImage(item.node)
-
+  const Items = data.allRemoteImages.edges.map(item => {
+    const image = getImage(item.node.advItemImages) 
+console.log(item.node.advItemImages)
     return (
       <ItemsCard>
      <GatsbyImage image={image} alt="..." />
         <Header>
-          <h4>Товар</h4>
-          <p> 300 грн.</p>
+          <h4>{item.node.itemName}</h4>
+          <p>{item.node.itemPrice} грн.</p>
           <p className="buy">Купити</p>
         </Header>
       </ItemsCard>
