@@ -133,7 +133,7 @@ const Button = styled.button`
 `
 export const query = graphql`
   query PhotosCateQuery {
-    allRemoteImages {
+    allRemoteImages(limit: 36) {
       edges {
         node {
           itemName
