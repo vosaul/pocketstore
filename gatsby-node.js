@@ -1,36 +1,41 @@
 const Items = require("./src/data/hl.json")
+const remItems = Items.price.items[0].item.map(item => {
+  return {
+    id: item.id[0],
+    categoryId: item.categoryId[0],
+    vendor: item.vendor[0],
+    image: item.image[0],
+    name: item.name[0],
+    priceRUAH: item.priceRUAH[0],
+    description: item.description[0],
+    url: item.url[0],
+    stock: item.stock[0],
+  }
+})
 
-exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => {
-  //console.log(Images.images[0])
-  const remoteItems = Items.price.items[0].item.map( item => {
-    return (
-         item.image[0]
-     )
-  })
-  const remItems = Items.price.items[0].item.map( item => {
-    return (
-    {
-        "categoryId" : item.categoryId[0],
-        "vendor" : item.vendor[0],
-        "image" : item.image[0],
-        "name": item.name[0],
-        "priceRUAH" : item.priceRUAH[0],
-    }
-     )
-  })
+exports.sourceNodes = async ({
+  actions,
+  createNodeId,
+  createContentDigest,
+}) => {
 
   /* const remoteItems = Items.price.items[0].item */
-  {console.log("REMOTE ITEMS =====>", remItems)}
+/*   {
+    console.log("REMOTE ITEMS =====>", remItems)
+  } */
   const { createNode } = actions
   const promises = remItems.map(Item =>
     createNode({
       id: createNodeId(`remoteImages-${Item.image}`),
-        itemCategoryId: Item.categoryId,
-        itemUrl: Item.image,
-        itemVendor: Item.vendor,
-        itemName: Item.name,
-        itemPrice: Item.priceRUAH,
-        internal: {
+      itemCategoryId: Item.categoryId,
+      itemImage: Item.image,
+      itemVendor: Item.vendor,
+      itemName: Item.name,
+      itemId: Item.id,
+      itemPrice: Item.priceRUAH,
+      itemDescription: Item.description,
+      itemUrl: Item.url,
+      internal: {
         type: "remoteImages",
         contentDigest: createContentDigest(Item),
       },
@@ -40,10 +45,12 @@ exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => 
 }
 
 exports.createPages = async ({ actions, graphql, reporter }) => {
-
   const { createPage } = actions
   const categoryTemplate = require.resolve(
     `./src/templates/categoryTemplate.js`
+  )
+  const itemPage = require.resolve(
+    `./src/templates/itemPage.js`
   )
   const result = await graphql(`
     {
@@ -81,12 +88,12 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     for (let key in from) {
       str = str.replace(new RegExp(from[key], "g"), to[key])
     }
-  
+ 
     str = str
       .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
       .replace(/\s+/g, "-") // collapse whitespace and replace by -
       .replace(/-+/g, "-") // collapse dashes
-  
+
     return str
   }
   // top level categories
@@ -100,28 +107,40 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     }
     return list
   }
-  let catList = topLevel(result.data.allDataJson.edges[0].node.price.categories[0].category)
+  let catList = topLevel(
+    result.data.allDataJson.edges[0].node.price.categories[0].category
+  )
 
-    catList.forEach(parent => {
-      let arr = result.data.allDataJson.edges[0].node.price.categories[0].category
-      for (let index = 0; index < arr.length; index++) {
-        let el = arr[index]
-        if (el.parentId && el.parentId[0] === parent.id[0]) {
-          let pagePath = slugify(parent.name[0]) + "/" + slugify(el.name[0])
-          createPage({
-            path: pagePath,
-            component: categoryTemplate,
-            context: {
-              // aitemitional data can be passed via context
-              title: el.name[0],
-              id: el.id[0]
-            },
-          })
-        }
+  catList.forEach(parent => {
+    let arr = result.data.allDataJson.edges[0].node.price.categories[0].category
+    for (let index = 0; index < arr.length; index++) {
+      let el = arr[index]
+      if (el.parentId && el.parentId[0] === parent.id[0]) {
+        let pagePath = slugify(parent.name[0]) + "/" + slugify(el.name[0])
+        createPage({
+          path: pagePath,
+          component: categoryTemplate,
+          context: {
+            // aitemitional data can be passed via context
+            title: el.name[0],
+            id: el.id[0],
+          },
+        })
       }
+    }
   })
-}
 
-/* module.exports = {
-  sourceNodes
-} */
+  remItems.forEach(el => {
+    let pagePath = "items/it/" + slugify(el.name)
+        createPage({
+          path: pagePath,
+          component: itemPage,
+          context: {
+            // aitemitional data can be passed via context
+            title: el.name,
+            id: el.id,
+            description: el.description,
+          },
+        })
+      })
+}

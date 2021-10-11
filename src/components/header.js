@@ -49,7 +49,7 @@ const Header = ({ siteTitle }) => (
       <Container>
         <Logo>
           <Link to="/" title="Інтернет-магазин pocketstore.ua">
-            <img src="../images/logo.svg" alt="logo" />
+            <img src="/images/logo.svg" alt="logo" />
           </Link>
         </Logo>
      {/*    <Nav>

@@ -132,50 +132,41 @@ const Button = styled.button`
   margin-bottom: 30px;
 `
 export const query = graphql`
-query CateQuery {
-  allDataJson {
-    edges {
-      node {
-        id
-        price {
-          categories {
-            category {
-              name
-              id
-              parentId
-            }
-          }
-          items {
-            item {
-              categoryId
-              description
-              image
-              name
-              priceRUAH
-              url
+  query ItemsList {
+    allRemoteImages(limit: 36) {
+      edges {
+        node {
+          itemName
+          itemPrice
+          itemCategoryId
+          advItemImages {
+            childImageSharp {
+              gatsbyImageData(
+                formats: WEBP
+                webpOptions: { quality: 50 }
+                width: 300
+              )
             }
           }
         }
       }
     }
   }
-}
 `
 const CategoryPage = ({ pageContext, data }) => {
-  const Items = data.allDataJson.edges[0].node.price.items[0].item.map( item => {
+  const Items = data.allRemoteImages.edges( item => {
     /* console.log(item, pageContext.id) */
-    if (item.categoryId[0] === pageContext.id ) {
+      let imageSRC = getImage(item.node.advItemImages)
       return (
 <ItemsCard >
-  <img src={item.image[0]} alt="..." />
+  <GatsbyImage image ={imageSRC} alt="..." />
   <Header>
         <h4>{item.name[0]}</h4> 
         <p> {item.priceRUAH[0]} грн.</p>
-        <p className="buy">Купити</p>
+        <p className="buy">Детально</p>
 </Header>
         </ItemsCard>
       )
-    }
   })
  
   return (

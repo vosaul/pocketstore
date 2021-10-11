@@ -141,7 +141,11 @@ export const query = graphql`
           itemCategoryId
           advItemImages {
             childImageSharp {
-              gatsbyImageData(formats: WEBP, webpOptions: {quality: 50}, width: 300)
+              gatsbyImageData(
+                formats: WEBP
+                webpOptions: { quality: 50 }
+                width: 300
+              )
             }
           }
         }
@@ -149,17 +153,39 @@ export const query = graphql`
     }
   }
 `
+function slugify(str) {
+  str = str.replace(/^\s+|\s+$/g, "") // trim
+  str = str.toLowerCase()
+
+  let from = [
+    "а", "б", "в", "г", "д", "е", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ь", "ю", "я",   ]
+  let to = [
+    "a", "b", "v", "g", "d", "e", "zh", "z", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "f", "h", "c", "ch", "sh", "sht", "y", "", "iu", "ia",   ]
+  for (let key in from) {
+    str = str.replace(new RegExp(from[key], "g"), to[key])
+  }
+
+  str = str
+    .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
+    .replace(/\s+/g, "-") // collapse whitespace and replace by -
+    .replace(/-+/g, "-") // collapse dashes
+
+  return str
+}
 const CategoryPage = ({ data }) => {
   const Items = data.allRemoteImages.edges.map(item => {
-    const image = getImage(item.node.advItemImages) 
-console.log(item.node.advItemImages)
+    const image = getImage(item.node.advItemImages)
+    console.log("IMAGE!!",item.node.advItemImages)
+    const itemLink = "it/" + slugify(item.node.itemName)
     return (
       <ItemsCard>
-     <GatsbyImage image={image} alt="..." />
+        <GatsbyImage image={image} alt="..." />
         <Header>
           <h4>{item.node.itemName}</h4>
           <p>{item.node.itemPrice} грн.</p>
-          <p className="buy">Купити</p>
+          <Link to={itemLink} className="buy">
+            Детально
+          </Link>
         </Header>
       </ItemsCard>
     )

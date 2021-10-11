@@ -85,6 +85,9 @@ const ItemsCard = styled.div`
     border-radius: 8px;
     align-self: end;
   }
+  @media (min-width: 768px){
+    grid-template-columns: 300px 1fr;
+  }
 `
 const Header = styled.div`
   display: grid;
@@ -131,60 +134,39 @@ const Button = styled.button`
   border-radius: 8px;
   margin-bottom: 30px;
 `
-/* export const query = graphql`
-query CateListQuery {
-  allDataJson {
-    edges {
-      node {
-        id
-        price {
-          categories {
-            category {
-              name
-              id
-              parentId
-            }
-          }
-          items {
-            item {
-              categoryId
-              description
-              image
-              name
-              priceRUAH
-              url
+export const data = graphql`
+  query ($id: String!)
+   {
+    allRemoteImages(filter: { itemId: { eq: $id } })  {
+      edges {
+        node {
+          itemName
+          itemId
+          itemPrice
+          itemCategoryId
+          advItemImages {
+            childImageSharp {
+              gatsbyImageData(
+                formats: WEBP
+                webpOptions: { quality: 50 }
+                width: 300
+              )
             }
           }
         }
       }
     }
   }
-}
-` */
-const CategoryListPage = ({ pageContext }) => {
-//console.log("List of images",pageContext.list)
-  /* const Items = data.allDataJson.edges[0].node.price.items[0].item.map( item => {
-    if (item.categoryId[0] === pageContext.id ) {
-      return (
-<ItemsCard >
-  <img src={item.image[0]} alt="..." />
-  <Header>
-        <h4>{item.name[0]}</h4> 
-        <p> {item.priceRUAH[0]} грн.</p>
-        <p className="buy">Купити</p>
-</Header>
-        </ItemsCard>
-      )
-    }
-  })
-  */
- const ImagesList = pageContext.list.map( (imageItem, i) =>{
-   return <p><a href={imageItem[0]} key={i}>{imageItem}</a></p>
- })
+`
+const ItemPage = ({ data, pageContext }) => {
+  let imageSrc = getImage(data.allRemoteImages.edges[0].node.advItemImages)
+
   return (
     <Layout>
       <Seo title={pageContext.title} />
       <Section>
+        <ItemsCard>
+        <GatsbyImage image ={imageSrc} alt="..." />
         <SectionHeader>
           <h1
             style={{
@@ -195,18 +177,17 @@ const CategoryListPage = ({ pageContext }) => {
           >
             {pageContext.title}
           </h1>
-          {/* <p>id: {pageContext.id}</p> */}
           <Button>
-      <Link to="/">На головну </Link>
+      <Link to="/items">До списку товарів</Link>
     </Button>
+        <p>
+        {pageContext.description}
+        </p>
         </SectionHeader>
-       {/*  <ItemsGrid>
-        {Items}
-        </ItemsGrid> */}
-        {ImagesList}
+        </ItemsCard>
       </Section>
     </Layout>
   )
 }
 
-export default CategoryListPage
+export default ItemPage
