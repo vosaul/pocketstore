@@ -111,7 +111,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     result.data.allDataJson.edges[0].node.price.categories[0].category
   )
 
-  catList.forEach(parent => {
+ /*  catList.forEach(parent => {
     let arr = result.data.allDataJson.edges[0].node.price.categories[0].category
     for (let index = 0; index < arr.length; index++) {
       let el = arr[index]
@@ -128,7 +128,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
         })
       }
     }
-  })
+  }) */
 
   remItems.forEach(el => {
     let pagePath = "items/it/" + slugify(el.name)

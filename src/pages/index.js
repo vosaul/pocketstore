@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Link } from "gatsby"
-import Cats from "../components/categoryGrid"
+/* import Cats from "../components/categoryGrid" */
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 import tw, { styled } from "twin.macro"
@@ -29,7 +29,7 @@ const IndexPage = () => (
       </Button>
       <br />
     </p>
-    <Cats />
+    {/* <Cats /> */}
   </Layout>
 )
 

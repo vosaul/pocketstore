@@ -175,7 +175,7 @@ function slugify(str) {
 const CategoryPage = ({ data }) => {
   const Items = data.allRemoteImages.edges.map(item => {
     const image = getImage(item.node.advItemImages)
-    console.log("IMAGE!!",item.node.advItemImages)
+    //console.log("IMAGE!!",item.node.advItemImages)
     const itemLink = "it/" + slugify(item.node.itemName)
     return (
       <ItemsCard>

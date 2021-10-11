@@ -6,6 +6,7 @@ import tw, { styled } from "twin.macro"
 import { Link } from "gatsby"
 import Seo from "../components/seo"
 
+
 const Section = styled.section`
    max-width: 1300px;
    margin: 50px auto;

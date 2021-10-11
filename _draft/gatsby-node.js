@@ -115,7 +115,6 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
  
   
   const sourceNodes = async ({ actions, createNodeId, createContentDigest }) => {
-  console.log(Images.images[0])
   const { createNode } = actions
   const promises = images.map(imageUrl =>
     createNode({
